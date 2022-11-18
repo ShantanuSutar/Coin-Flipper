@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
+import { choice } from './helpers';
 
 class CoinContainer extends Component {
 
     static defaultProps = {
         coins: [
             { side: 'heads', imgSrc: "https://tinyurl.com/react-coin-heads-jpg" },
-            { side: 'heads', imgSrc: "https://tinyurl.com/react-coin-tails-jpg" }
+            { side: 'tails', imgSrc: "https://tinyurl.com/react-coin-tails-jpg" }
         ]
     };
     constructor(props) {
@@ -16,8 +17,28 @@ class CoinContainer extends Component {
             nHeads: 0,
             nTails: 0
         };
+        this.handleClick = this.handleClick.bind(this);
     }
-
+    flipCoin() {
+        const newCoin = choice(this.props.coins);
+        this.setState(st => {
+            let newState = {
+                ...st,
+                currCoin: newCoin,
+                nFlips: st.nFlips + 1
+            };
+            if (newCoin.side === "heads") {
+                newState.nHeads += 1;
+            }
+            else {
+                newState.nTails += 1;
+            }
+            return newState;
+        });
+    }
+    handleClick(e) {
+        this.flipCoin();
+    }
     render() {
         return (
             <div className="CoinContainer" >
